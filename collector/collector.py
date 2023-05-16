@@ -17,14 +17,21 @@ with serial.Serial('/dev/ttyACM0', 115200, timeout=1) as ser:
             continue
 
         # now = dt.now()
-        now_str = dt.now().isoformat()
+        now = dt.now()
         # something is currently wrong with the CLUE timestamps
         # there is an adafruit_ntp module that seems like it could
         # fix this, but you have to provide the server implementation.
         # Instead, we'll fix this on the receive side for now
-        line_data["timestamp"] = now_str
+        line_data["timestamp"] = now.isoformat()
         line_str = json.dumps(line_data, sort_keys=True)
         line_str_final = "{},\n".format(line_str)
+
+        now_str = now.isoformat(sep=' ', timespec='seconds')
+        temp_c_str = line_data['temperature']
+        temp_c = float(temp_c_str.split(" ")[0])
+        temp_f = (temp_c * (9/5)) + 32
+        log_line = f"{now_str} temp {temp_c_str}/{temp_f} F"
+        print(log_line)
 
         date_str = date.today().isoformat()
         logfile_name = "clue_logs/{}.log".format(date_str)
