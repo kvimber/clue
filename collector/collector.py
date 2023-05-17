@@ -30,7 +30,7 @@ with serial.Serial('/dev/ttyACM0', 115200, timeout=1) as ser:
         temp_c_str = line_data['temperature']
         temp_c = float(temp_c_str.split(" ")[0])
         temp_f = (temp_c * (9/5)) + 32
-        log_line = f"{now_str} temp {temp_c_str}/{temp_f} F"
+        log_line = f"{now_str} temp {temp_c_str}/{temp_f:.1f} F"
         print(log_line)
 
         date_str = date.today().isoformat()
